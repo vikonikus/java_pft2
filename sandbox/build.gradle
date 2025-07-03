@@ -1,5 +1,10 @@
 apply plugin: 'java'
 apply plugin: 'application'
+// plugins {
+//    id 'java'
+//    id 'application'
+// }
+
 mainClassName = "ru.stqa.pft.sandbox.MyFirstProgram"
 
 repositories {
@@ -7,5 +12,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.testng:testng:7.11.0'
+    testImplementation 'org.testng:testng:7.11.0'
+}
+
+test {
+    useTestNG()  // Важно для TestNG!
 }
