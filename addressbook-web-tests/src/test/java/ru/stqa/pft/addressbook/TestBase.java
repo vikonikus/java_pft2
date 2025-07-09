@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
@@ -9,7 +10,10 @@ import org.testng.annotations.BeforeMethod;
 
 import java.time.Duration;
 
+import static org.testng.Assert.assertTrue;
+
 public class TestBase {
+  protected boolean acceptNextAlert = true;
   WebDriver wd;
 
   private static boolean isAlertPresent(FirefoxDriver driver) {
@@ -107,5 +111,36 @@ public class TestBase {
 
   protected void gotoAddNewContactPage() {
     wd.findElement(By.linkText("add new")).click();
+  }
+
+  protected void deleteContact() {
+    wd.findElement(By.xpath("//input[@value='Delete']")).click();
+  }
+
+  protected void selectContact() {
+    wd.findElement(By.name("selected[]")).click();
+  }
+
+  protected void gotoHomePage() {
+    wd.findElement(By.linkText("home")).click();
+  }
+
+  protected void submitDeletionContact() {
+    assertTrue(closeAlertAndGetItsText().matches("^Delete 1 addresses[\\s\\S]$"));
+  }
+
+  private String closeAlertAndGetItsText() {
+    try {
+      Alert alert = wd.switchTo().alert();
+      String alertText = alert.getText();
+      if (acceptNextAlert) {
+        alert.accept();
+      } else {
+        alert.dismiss();
+      }
+      return alertText;
+    } finally {
+      acceptNextAlert = true;
+    }
   }
 }
