@@ -1,22 +1,21 @@
-package ru.stqa.pft.addressbook;
+package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.time.Duration;
-
 import static org.testng.Assert.assertTrue;
 
-public class TestBase {
-  protected boolean acceptNextAlert = true;
+public class ApplicationManager {
+  public boolean acceptNextAlert = true;
   WebDriver wd;
 
-  private static boolean isAlertPresent(FirefoxDriver driver) {
+  public static boolean isAlertPresent(FirefoxDriver driver) {
     try {
       driver.switchTo().alert();
       return true;
@@ -25,15 +24,14 @@ public class TestBase {
     }
   }
 
-  @BeforeMethod
-  public void setUp() throws Exception {
+  public void init() {
     wd = new FirefoxDriver();
     wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
     wd.get("http://localhost/addressbook/group.php");
     login("admin", "secret");
   }
 
-  private void login(String username, String password) {
+  public void login(String username, String password) {
     wd.findElement(By.name("user")).click();
     wd.findElement(By.name("user")).clear();
     wd.findElement(By.name("user")).sendKeys(username);
@@ -43,15 +41,15 @@ public class TestBase {
     wd.findElement(By.xpath("//input[@value='Login']")).click();
   }
 
-  protected void returnToGroupPage() {
+  public void returnToGroupPage() {
     wd.findElement(By.linkText("group page")).click();
   }
 
-  protected void submitGroupCreation() {
+  public void submitGroupCreation() {
     wd.findElement(By.name("submit")).click();
   }
 
-  protected void fillGroupForm(GroupData groupData) {
+  public void fillGroupForm(GroupData groupData) {
     wd.findElement(By.name("group_name")).click();
     wd.findElement(By.name("group_name")).clear();
     wd.findElement(By.name("group_name")).sendKeys(groupData.name());
@@ -63,36 +61,35 @@ public class TestBase {
     wd.findElement(By.name("group_footer")).sendKeys(groupData.footer());
   }
 
-  protected void initGroupCreation() {
+  public void initGroupCreation() {
     wd.findElement(By.name("new")).click();
   }
 
-  protected void gotoGroupPage() {
+  public void gotoGroupPage() {
     wd.findElement(By.linkText("groups")).click();
   }
 
-  @AfterMethod
-  public void tearDown() {
+  public void stop() {
     wd.quit();
   }
 
-  protected void deleteSelectedGroups() {
+  public void deleteSelectedGroups() {
     wd.findElement(By.name("delete")).click();
   }
 
-  protected void selectGroup() {
+  public void selectGroup() {
     wd.findElement(By.name("selected[]")).click();
   }
 
-  protected void returnToHomePage() {
+  public void returnToHomePage() {
     wd.findElement(By.linkText("home page")).click();
   }
 
-  protected void submitContactCreation() {
+  public void submitContactCreation() {
     wd.findElement(By.xpath("//div[@id='content']/form/input[21]")).click();
   }
 
-  protected void fillNewContactForm(ContactData contactData) {
+  public void fillNewContactForm(ContactData contactData) {
     wd.findElement(By.name("firstname")).click();
     wd.findElement(By.name("firstname")).clear();
     wd.findElement(By.name("firstname")).sendKeys(contactData.firstname());
@@ -109,27 +106,27 @@ public class TestBase {
     wd.findElement(By.name("email")).sendKeys(contactData.email());
   }
 
-  protected void gotoAddNewContactPage() {
+  public void gotoAddNewContactPage() {
     wd.findElement(By.linkText("add new")).click();
   }
 
-  protected void deleteContact() {
+  public void deleteContact() {
     wd.findElement(By.xpath("//input[@value='Delete']")).click();
   }
 
-  protected void selectContact() {
+  public void selectContact() {
     wd.findElement(By.name("selected[]")).click();
   }
 
-  protected void gotoHomePage() {
+  public void gotoHomePage() {
     wd.findElement(By.linkText("home")).click();
   }
 
-  protected void submitDeletionContact() {
+  public void submitDeletionContact() {
     assertTrue(closeAlertAndGetItsText().matches("^Delete 1 addresses[\\s\\S]$"));
   }
 
-  private String closeAlertAndGetItsText() {
+  public String closeAlertAndGetItsText() {
     try {
       Alert alert = wd.switchTo().alert();
       String alertText = alert.getText();
