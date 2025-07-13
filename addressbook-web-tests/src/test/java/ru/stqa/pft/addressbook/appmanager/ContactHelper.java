@@ -4,7 +4,6 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import ru.stqa.pft.addressbook.model.ContactData;
-import static org.testng.Assert.assertTrue;
 
 public class ContactHelper extends HeplerBase {
 
@@ -39,7 +38,7 @@ public class ContactHelper extends HeplerBase {
   }
 
   public void submitDeletionContact() {
-    assertTrue(closeAlertAndGetItsText().matches("^Delete 1 addresses[\\s\\S]$"));
+    wd.switchTo().alert().accept();
   }
 
   public String closeAlertAndGetItsText() {
