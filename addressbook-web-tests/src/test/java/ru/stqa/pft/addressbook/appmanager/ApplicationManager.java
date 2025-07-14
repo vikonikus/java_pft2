@@ -1,19 +1,32 @@
 package ru.stqa.pft.addressbook.appmanager;
 
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.Browser;
 import java.time.Duration;
 
 public class ApplicationManager {
+  private Browser browser;
   WebDriver wd;
   private ContactHelper contactHelper;
   private NavigationHelper navigationHelper;
   private GroupHelper groupHelper;
   private SessionHelper sessionHelper;
 
+  public ApplicationManager(Browser browser) {
+    this.browser = browser;
+  }
+
   public void init() {
-    wd = new FirefoxDriver();
+    if (browser == Browser.FIREFOX) {
+      wd = new FirefoxDriver();
+    } else if (browser == Browser.CHROME) {
+      wd = new ChromeDriver();
+    } else if (browser == Browser.EDGE){
+      wd = new EdgeDriver();
+    }
     wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
     wd.get("http://localhost/addressbook/group.php");
     groupHelper = new GroupHelper(wd);
