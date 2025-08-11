@@ -1,21 +1,41 @@
-apply plugin: 'java'
-apply plugin: 'application'
-// plugins {
-//    id 'java'
-//    id 'application'
-// }
+//apply plugin: 'java'
+//apply plugin: 'application'
+plugins {
+    id 'java'
+    id 'application'
+}
 
-mainClassName = "ru.stqa.pft.sandbox.MyFirstProgram"
+// Основная точка входа — класс с main-методом
+application {
+    mainClass = 'ru.stqa.pft.sandbox.MyFirstProgram'
+}
 
+// Репозитории для загрузки зависимостей
 repositories {
     mavenCentral()
 }
 
+// Зависимости
 dependencies {
+    // TestNG для тестирования
     testImplementation 'org.testng:testng:7.11.0'
+
+    // Selenium WebDriver
     testImplementation 'org.seleniumhq.selenium:selenium-java:4.34.0'
 }
 
+// Настройка задачи test
 test {
-    useTestNG()  // Важно для TestNG!
+    useTestNG()
+
+    // Логирование результатов тестов
+    testLogging {
+        events "passed", "skipped", "failed"
+        // Опционально: показывать stack trace
+//         exceptionFormat = 'full'
+//         showStandardStreams = true
+    }
+
+    // Опционально: передать параметры в JVM при запуске тестов
+    // jvmArgs '-Dsome.property=value'
 }
